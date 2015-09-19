@@ -1,29 +1,31 @@
 package com.h264.decode2;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Environment;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
 
-import java.util.jar.Attributes;
 
 
 /**
  * Created by Administrator on 2015/8/7.
  */
+
+
 public class MyView extends SurfaceView implements SurfaceHolder.Callback{
 
-
-
+    public static final int WIDTH = 2048;
+    public static final int HEIGHT = 1088;
+    public static final int ScreenWidth = 720;
+   // public static final int ScreenHeight = 1232;
     private SurfaceHolder Holder;
     private MyThread myThread;
 
@@ -39,9 +41,11 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback{
 
         Log.d("MyView","surfaceCreated");
         ViewGroup.LayoutParams lp = this.getLayoutParams();
-        lp.width = 720;
-        lp.height = 288 * 720 / 352;
-        holder.setFixedSize(352,288);
+
+
+        lp.width = ScreenWidth;
+        lp.height = HEIGHT * ScreenWidth / WIDTH;
+        holder.setFixedSize(lp.width,lp.height);
         this.setLayoutParams(lp);
         myThread.isRun = true;
         //myThread.start();
@@ -64,11 +68,16 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback{
 }
 class MyThread implements Runnable{
 
+    public static final int WIDTH = 2048;
+    public static final int HEIGHT = 1088;
+    public static final int ScreenWidth = 720;
+    public static final int ScreenHeight = 1232;
     //private ByteBuffer buffer = null;
-    private Bitmap videoBit = Bitmap.createBitmap(352,288, Bitmap.Config.RGB_565);
-    static final String path = Environment.getExternalStorageDirectory().getPath() + "/sender.264";
+    private Bitmap videoBit = Bitmap.createBitmap(WIDTH,HEIGHT, Bitmap.Config.RGB_565);
+    //static final String path = Environment.getExternalStorageDirectory().getPath() + "/sender.264";
+    static final String path = Environment.getExternalStorageDirectory().getPath() + "/LucamVideo.264";
     //static final String path = Environment.getExternalStorageDirectory().getPath() + "/sduni.sdp";
-    FFmpegNative ffmpeg = new FFmpegNative(352,288,path);
+    FFmpegNative ffmpeg = new FFmpegNative(WIDTH,HEIGHT,path);
     video myVideo = new video();
     private final SurfaceHolder holder;
     public boolean isRun;
@@ -92,7 +101,9 @@ class MyThread implements Runnable{
                     isRun = myVideo.isContinue;
                     if(myVideo.vbuffer != null){
                         videoBit.copyPixelsFromBuffer(myVideo.vbuffer);
-                        canvas.drawBitmap(videoBit, 0, 0, p);
+                        Bitmap showBitmap = adaptive(videoBit);
+                        //canvas.drawBitmap(videoBit, 0, 0, p);
+                        canvas.drawBitmap(showBitmap,0,0,p);
                         myVideo.vbuffer.position(0);
                         count++;
                         //buffer = null;
@@ -111,6 +122,26 @@ class MyThread implements Runnable{
                     holder.unlockCanvasAndPost(canvas); //结束锁定画布，并提交改变
             }
         }
+    }
+
+    // Image Scale 图像缩放、适配不同分辨率
+    public Bitmap adaptive(Bitmap bitmap){
+        float Imgwdh =  (float)WIDTH / HEIGHT;
+        float Scrwdh =(float) ScreenWidth / ScreenHeight;
+       // Log.d("MyView","width / height = " + Imgwdh);
+       // Log.d("MyView", "ScreenWidth / ScreenHeight = " + Scrwdh);
+        Matrix matrix = new Matrix();
+        float wScale,hScale;
+        if(Imgwdh > Scrwdh){
+            wScale = (float)ScreenWidth / WIDTH;
+            hScale = wScale;
+        }else {
+            hScale = (float)ScreenHeight / HEIGHT;
+            wScale = hScale;
+        }
+        matrix.postScale(wScale, hScale);
+        Bitmap newbmp = Bitmap.createBitmap(bitmap,0,0,WIDTH,HEIGHT,matrix,true);
+        return newbmp;
     }
 
 }
