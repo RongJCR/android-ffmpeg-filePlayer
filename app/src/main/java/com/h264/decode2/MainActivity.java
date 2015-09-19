@@ -32,6 +32,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(new MyView(this));
+        if (this.getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE) {
+            MyScreen.getInstance().setlandflag(true);
+        } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            MyScreen.getInstance().setlandflag(false);
+        }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         Log.d("MainActivity", "OnCreate");
@@ -49,7 +55,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         play.setOnClickListener(this);
         stop.setOnClickListener(this);
 
-
     }
 
     /* @Override
@@ -63,8 +68,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onConfigurationChanged(newConfig);
         if (this.getResources().getConfiguration().orientation ==
                 Configuration.ORIENTATION_LANDSCAPE) {
+            MyScreen.getInstance().setlandflag(true);
             Toast.makeText(getApplicationContext(), "切换为横屏", Toast.LENGTH_SHORT).show();
         } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            MyScreen.getInstance().setlandflag(false);
             Toast.makeText(getApplicationContext(), "切换为竖屏", Toast.LENGTH_SHORT).show();
         }
     }
@@ -96,10 +103,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.play:
                 //Log.d("MainActivity","Clicked play");
-                Toast.makeText(MainActivity.this, "You clicked play", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "别Play了，按右边那个", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.stop:
-                Toast.makeText(MainActivity.this, "You clicked stop", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "根本停不下来", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;

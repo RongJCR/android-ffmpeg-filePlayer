@@ -24,7 +24,7 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback{
 
     public static final int WIDTH = 2048;
     public static final int HEIGHT = 1088;
-    public static final int ScreenWidth = 720;
+    public static int ScreenWidth = 720;
    // public static final int ScreenHeight = 1232;
     private SurfaceHolder Holder;
     private MyThread myThread;
@@ -39,10 +39,13 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback{
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
 
-        Log.d("MyView","surfaceCreated");
+        Log.d("MyView", "surfaceCreated");
+        if(MyScreen.getInstance().getlandflag()){
+            ScreenWidth = 1232;
+        }else {
+            ScreenWidth = 720;
+        }
         ViewGroup.LayoutParams lp = this.getLayoutParams();
-
-
         lp.width = ScreenWidth;
         lp.height = HEIGHT * ScreenWidth / WIDTH;
         holder.setFixedSize(lp.width,lp.height);
@@ -56,7 +59,8 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback{
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         // 用于surfaceView区域变化时，例如横屏竖屏，我们暂时不用
-        Log.d("MyView","surfaceChanged");
+        Log.d("MyView", "surfaceChanged");
+
     }
 
     @Override
@@ -70,8 +74,8 @@ class MyThread implements Runnable{
 
     public static final int WIDTH = 2048;
     public static final int HEIGHT = 1088;
-    public static final int ScreenWidth = 720;
-    public static final int ScreenHeight = 1232;
+    public static  int ScreenWidth = 720;
+    public static  int ScreenHeight = 1232;
     //private ByteBuffer buffer = null;
     private Bitmap videoBit = Bitmap.createBitmap(WIDTH,HEIGHT, Bitmap.Config.RGB_565);
     //static final String path = Environment.getExternalStorageDirectory().getPath() + "/sender.264";
@@ -107,6 +111,8 @@ class MyThread implements Runnable{
                         myVideo.vbuffer.position(0);
                         count++;
                         //buffer = null;
+                        Log.i("MyScreen", "flag = " + MyScreen.getInstance().getlandflag());
+
                     }
                     Paint pt = new Paint();
                     pt.setColor(Color.WHITE);
@@ -126,6 +132,13 @@ class MyThread implements Runnable{
 
     // Image Scale 图像缩放、适配不同分辨率
     public Bitmap adaptive(Bitmap bitmap){
+        if(MyScreen.getInstance().getlandflag()){
+            ScreenWidth = 1232;
+            ScreenHeight = 720;
+        }else {
+            ScreenWidth = 720;
+            ScreenHeight = 1232;
+        }
         float Imgwdh =  (float)WIDTH / HEIGHT;
         float Scrwdh =(float) ScreenWidth / ScreenHeight;
        // Log.d("MyView","width / height = " + Imgwdh);
