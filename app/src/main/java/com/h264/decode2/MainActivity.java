@@ -2,6 +2,7 @@ package com.h264.decode2;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Path;
 import android.os.Bundle;
@@ -21,10 +22,11 @@ import java.nio.ByteBuffer;
 import java.util.jar.Attributes;
 
 
-public class MainActivity extends Activity implements View.OnClickListener{
+public class MainActivity extends Activity implements View.OnClickListener {
 
     Button play;
     Button stop;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,20 +41,31 @@ public class MainActivity extends Activity implements View.OnClickListener{
         int height = metric.heightPixels;
         int width = metric.widthPixels;
         int densityDpi = metric.densityDpi;
-        Log.i("MainActivity","heightPixels: " + height + "; widthPixels: " + width + "; densityDpi: " + densityDpi);
-        play = (Button)findViewById(R.id.play);
-        stop = (Button)findViewById(R.id.stop);
+        Log.i("MainActivity", "heightPixels: " + height + "; widthPixels: " + width + "; densityDpi: " + densityDpi);
+        play = (Button) findViewById(R.id.play);
+        stop = (Button) findViewById(R.id.stop);
         play.setOnClickListener(this);
         stop.setOnClickListener(this);
 
-        
-    }
-   /* @Override
-    protected void onDestroy(){
 
-        super.onDestroy();
     }
-*/
+
+    /* @Override
+     protected void onDestroy(){
+
+         super.onDestroy();
+     }
+ */
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (this.getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE) {
+            Toast.makeText(getApplicationContext(), "切换为横屏", Toast.LENGTH_SHORT).show();
+        } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Toast.makeText(getApplicationContext(), "切换为竖屏", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,13 +91,13 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.play:
                 //Log.d("MainActivity","Clicked play");
-                Toast.makeText(MainActivity.this,"You clicked play",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "You clicked play", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.stop:
-                Toast.makeText(MainActivity.this,"You clicked stop",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "You clicked stop", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;

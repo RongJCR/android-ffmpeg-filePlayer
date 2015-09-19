@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.os.Environment;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback{
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
 
+        Log.d("MyView","surfaceCreated");
         ViewGroup.LayoutParams lp = this.getLayoutParams();
         lp.width = 720;
         lp.height = 288 * 720 / 352;
@@ -50,10 +52,12 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback{
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         // 用于surfaceView区域变化时，例如横屏竖屏，我们暂时不用
+        Log.d("MyView","surfaceChanged");
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        Log.d("MyView","surfaceDestroyed");
         myThread.isRun = false;
     }
 
