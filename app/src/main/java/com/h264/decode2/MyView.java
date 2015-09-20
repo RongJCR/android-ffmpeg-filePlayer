@@ -25,12 +25,13 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback{
     public static final int WIDTH = 2048;
     public static final int HEIGHT = 1088;
     public static int ScreenWidth = 720;
+    //public static int ScreenHeight = 1232;
    // public static final int ScreenHeight = 1232;
     private SurfaceHolder Holder;
     private MyThread myThread;
 
     public MyView(Context context,AttributeSet attrs){
-        super(context,attrs);
+        super(context, attrs);
         Holder = this.getHolder();
         Holder.addCallback(this);
         myThread = new MyThread(Holder); // 创建一个绘图线程
@@ -42,12 +43,15 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback{
         Log.d("MyView", "surfaceCreated");
         if(MyScreen.getInstance().getlandflag()){
             ScreenWidth = 1232;
+            //ScreenHeight = 720;
         }else {
             ScreenWidth = 720;
+            //ScreenHeight = 1232;
         }
         ViewGroup.LayoutParams lp = this.getLayoutParams();
         lp.width = ScreenWidth;
         lp.height = HEIGHT * ScreenWidth / WIDTH;
+        //lp.height = ScreenHeight;
         holder.setFixedSize(lp.width,lp.height);
         this.setLayoutParams(lp);
         myThread.isRun = true;
@@ -76,6 +80,7 @@ class MyThread implements Runnable{
     public static final int HEIGHT = 1088;
     public static  int ScreenWidth = 720;
     public static  int ScreenHeight = 1232;
+    //public boolean flag = MyScreen.getInstance().getlandflag();
     //private ByteBuffer buffer = null;
     private Bitmap videoBit = Bitmap.createBitmap(WIDTH,HEIGHT, Bitmap.Config.RGB_565);
     //static final String path = Environment.getExternalStorageDirectory().getPath() + "/sender.264";
@@ -91,7 +96,7 @@ class MyThread implements Runnable{
     }
     @Override
     public void run(){
-        int count = 0;
+       // int count = 0;
         Canvas canvas = null;
         //ByteBuffer buffer = null;
 
@@ -107,11 +112,14 @@ class MyThread implements Runnable{
                         videoBit.copyPixelsFromBuffer(myVideo.vbuffer);
                         Bitmap showBitmap = adaptive(videoBit);
                         //canvas.drawBitmap(videoBit, 0, 0, p);
-                        canvas.drawBitmap(showBitmap,0,0,p);
+                        canvas.drawBitmap(showBitmap, 0, 0, p);
                         myVideo.vbuffer.position(0);
-                        count++;
+                        //count++;
                         //buffer = null;
-                        Log.i("MyScreen", "flag = " + MyScreen.getInstance().getlandflag());
+                        //Log.i("MyScreen", "flag = " + MyScreen.getInstance().getlandflag());
+                        /*if(MyScreen.getInstance().getlandflag() != flag){
+                            break;
+                        }*/
 
                     }
                     Paint pt = new Paint();
