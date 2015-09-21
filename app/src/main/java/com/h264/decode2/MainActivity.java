@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
@@ -27,7 +28,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     Button play;
     Button stop;
-
+    MyView myView;
+    public static final int WIDTH = 2048;
+    public static final int HEIGHT = 1088;
+    public static  final int ScreenWidth = 720;
+    public static  final int ScreenHeight = 1232;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,17 +57,36 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Log.i("MainActivity", "heightPixels: " + height + "; widthPixels: " + width + "; densityDpi: " + densityDpi);
         play = (Button) findViewById(R.id.play);
         stop = (Button) findViewById(R.id.stop);
+        myView = (MyView)findViewById(R.id.my_View);
         play.setOnClickListener(this);
         stop.setOnClickListener(this);
 
     }
 
-    /* @Override
-     protected void onDestroy(){
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("MainActivity", "onPause");
+    }
 
-         super.onDestroy();
-     }
- */
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("MainActivity", "onStop");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("MainActivity", "onResume");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("MainActivity", "onDestroy");
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -70,9 +94,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Configuration.ORIENTATION_LANDSCAPE) {
             MyScreen.getInstance().setlandflag(true);
             Toast.makeText(getApplicationContext(), "切换为横屏", Toast.LENGTH_SHORT).show();
+            ViewGroup.LayoutParams lp = myView.getLayoutParams();
+            lp.width = ScreenHeight;
+            lp.height = HEIGHT * ScreenHeight / WIDTH;
+            myView.setLayoutParams(lp);
         } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             MyScreen.getInstance().setlandflag(false);
             Toast.makeText(getApplicationContext(), "切换为竖屏", Toast.LENGTH_SHORT).show();
+            ViewGroup.LayoutParams lp = myView.getLayoutParams();
+            lp.width = ScreenWidth;
+            lp.height = HEIGHT * ScreenWidth / WIDTH;
+            myView.setLayoutParams(lp);
         }
     }
 

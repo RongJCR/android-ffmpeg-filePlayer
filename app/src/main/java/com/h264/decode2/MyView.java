@@ -93,13 +93,13 @@ class MyThread implements Runnable{
     public MyThread(SurfaceHolder holder){
         this.holder = holder;
         isRun = true;
+
     }
     @Override
     public void run(){
        // int count = 0;
         Canvas canvas = null;
         //ByteBuffer buffer = null;
-
         while(isRun){
             try{
                 synchronized(holder){ // 同步加锁holder
@@ -108,6 +108,7 @@ class MyThread implements Runnable{
                     Paint p = new Paint(); // 创建画笔
                     myVideo = ffmpeg.videoPlay();
                     isRun = myVideo.isContinue;
+                    holder.setFixedSize(ScreenWidth,HEIGHT * ScreenWidth / WIDTH);
                     if(myVideo.vbuffer != null){
                         videoBit.copyPixelsFromBuffer(myVideo.vbuffer);
                         Bitmap showBitmap = adaptive(videoBit);

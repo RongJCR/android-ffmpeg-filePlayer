@@ -16,7 +16,8 @@
         <com.h264.decode2.MyView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:id="@+id/my_View"/>
     </FrameLayout>
     <LinearLayout
         android:layout_width="match_parent"
