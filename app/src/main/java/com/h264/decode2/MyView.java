@@ -85,7 +85,7 @@ class MyThread implements Runnable{
     private Bitmap videoBit = Bitmap.createBitmap(WIDTH,HEIGHT, Bitmap.Config.RGB_565);
     //static final String path = Environment.getExternalStorageDirectory().getPath() + "/sender.264";
     static final String path = Environment.getExternalStorageDirectory().getPath() + "/LucamVideo.264";
-    //static final String path = Environment.getExternalStorageDirectory().getPath() + "/sduni.sdp";
+    //static final String path = Environment.getExternalStorageDirectory().getPath() + "/sdunic.sdp";
     FFmpegNative ffmpeg = new FFmpegNative(WIDTH,HEIGHT,path);
     video myVideo = new video();
     private final SurfaceHolder holder;

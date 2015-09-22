@@ -35,7 +35,7 @@ JNIEXPORT jint JNICALL Init(JNIEnv *env, jobject obj, jstring fileName)
     tmp = avformat_open_input(&pFormatCtx,local_title,NULL,NULL);
     if(tmp != 0)
     return tmp;
-    int tmp2 = 0;
+    int tmp2 = -100;
     tmp2 = avformat_find_stream_info(pFormatCtx,NULL);
     //if(avformat_find_stream_info(pFormatCtx,NULL) < 0)
     //return 2;
@@ -45,8 +45,11 @@ JNIEXPORT jint JNICALL Init(JNIEnv *env, jobject obj, jstring fileName)
     videoStream = -1;
     for(i = 0; i < pFormatCtx->nb_streams; i++)
     {
-        videoStream = i;
-        break;
+        if(pFormatCtx->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO)
+        {
+            videoStream = i;
+            break;
+        }
     }
     if(videoStream == -1)
     return 3;
@@ -119,6 +122,7 @@ JNIEXPORT jint JNICALL Decode2RGB
             }
             else
                 return 3;
+
         }
         else
             return 4;
@@ -170,8 +174,8 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
     {
         return result;
     }
-
-	return JNI_VERSION_1_4;
+    //return JNI_VERSION_1_4;
+	return JNI_VERSION_1_6;
 }
 
 
