@@ -10,17 +10,17 @@ extern "C" {
 /*
  * Class:     com_h264_decode2_FFmpegNative
  * Method:    Init
- * Signature: (Ljava/lang/String;)I
+ * Signature: (Ljava/lang/String;[B)I
  */
-JNIEXPORT jint JNICALL Init
-        (JNIEnv *, jobject, jstring);
+JNIEXPORT jint JNICALL Java_com_h264_decode2_FFmpegNative_Init
+  (JNIEnv *, jobject, jstring, jbyteArray);
 
 /*
  * Class:     com_h264_decode2_FFmpegNative
  * Method:    Decode2RGB
  * Signature: ([B)I
  */
-JNIEXPORT jint JNICALL Decode2RGB
+JNIEXPORT jint JNICALL Java_com_h264_decode2_FFmpegNative_Decode2RGB
   (JNIEnv *, jobject, jbyteArray);
 
 #ifdef __cplusplus

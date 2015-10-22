@@ -29,12 +29,13 @@ public class FFmpegNative {
         //System.loadLibrary("SDL");
         System.loadLibrary("Myffmpeg_codec");
     }
-    public native int Init(String videoPath);
+    public native int Init(String videoPath,byte[] sdpBuf);
     public native int Decode2RGB(byte[] out);
 
     //int width = 0;
     //int height = 0;
      byte[] mPixel = null;
+     byte[] sdpBuf = null;
      ByteBuffer buffer = null;
 
 
@@ -45,13 +46,13 @@ public class FFmpegNative {
         //this.height= height;
 
         mPixel = new byte[6144 * height * 2];
+        sdpBuf = new byte[32768];
         buffer = ByteBuffer.wrap(this.mPixel);
         /*for(int i = 0; i < mPixel.length; i++){
             mPixel[i] = (byte) 0x00;
         }*/
-
         Log.d(TAG,"path: " + path);
-        int isInit = Init(path);
+        int isInit = Init(path,sdpBuf);
        // Log.d("FFmpegNative","numBytes = " + isInit);
         if(isInit == 0){
             Log.d(TAG,"Init Success!");

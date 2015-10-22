@@ -8,7 +8,6 @@
 #include "ffmpeg/include/libswresample/swresample.h"
 #include "com_h264_decode2_FFmpegNative.h"
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -22,10 +21,11 @@ AVPacket		packet;				//解析文件时会将音/视频帧读入到packet中
 int				frameFinished;
 int             numBytes;
 uint8_t   *buffer;
-
-JNIEXPORT jint JNICALL Init(JNIEnv *env, jobject obj, jstring fileName)
+//uint8_t    Info[] = "v=0\r\no=- 0 0 IN IP4 192.168.1.24\r\ns=No Name\r\nt=0 0\r\nc=IN IP4 192.168.1.23\r\na=tool:libavformat 55.37.102\r\nm=video 6666 RTP/AVP 96\r\na=rtpmap:96 H264/90000\r\na=fmtp:96 packetization-mode=1\n";
+JNIEXPORT jint JNICALL Init(JNIEnv *env, jobject obj, jstring fileName, jbyteArray sdpBuf)
 {
     const char* local_title = (*env)->GetStringUTFChars(env,fileName,NULL); //取得java字符串的C版本
+    jbyte *sdpData = (jbyte*)(*env)->GetByteArrayElements(env,sdpBuf,0);
     frameFinished = 0;
     av_register_all();
     avformat_network_init();
@@ -35,7 +35,21 @@ JNIEXPORT jint JNICALL Init(JNIEnv *env, jobject obj, jstring fileName)
     tmp = avformat_open_input(&pFormatCtx,local_title,NULL,NULL);
     if(tmp != 0)
     return tmp;
-    int tmp2 = -100;
+    // 复制sdp文件到pFormatCtx->pb->buffer中
+    //memcpy(pFormatCtx->pb->buffer,Info, sizeof(Info));
+    /*int buffer_size = 384;
+    uint8_t* pBuffer = (uint8_t*)malloc(buffer_size);
+    memset(pBuffer,0,buffer_size);
+    memcpy(pBuffer,pFormatCtx->pb->buffer + 2,buffer_size);
+    memset(pFormatCtx->pb->buffer,0,buffer_size + 2);
+    memcpy(pFormatCtx->pb->buffer,pBuffer,buffer_size);
+    free(pBuffer);*/
+
+
+    memcpy(sdpData,pFormatCtx->pb->buffer,pFormatCtx->pb->buffer_size);
+    (*env)->ReleaseByteArrayElements(env,sdpBuf,sdpData,0);
+
+    int tmp2 = 0;
     tmp2 = avformat_find_stream_info(pFormatCtx,NULL);
     //if(avformat_find_stream_info(pFormatCtx,NULL) < 0)
     //return 2;
@@ -132,7 +146,7 @@ JNIEXPORT jint JNICALL Decode2RGB
 
 }
 static JNINativeMethod methods[] = {
-        {"Init","(Ljava/lang/String;)I",(void *)Init},
+        {"Init","(Ljava/lang/String;[B)I",(void *)Init},
         {"Decode2RGB","([B)I",(void *)Decode2RGB}
 };
 static int registerNativeMethods(JNIEnv* env, const char* className, JNINativeMethod* gMethods, int numMethods)
