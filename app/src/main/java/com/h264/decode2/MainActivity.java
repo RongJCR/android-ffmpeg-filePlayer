@@ -1,27 +1,20 @@
 package com.h264.decode2;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.Path;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.io.File;
-import java.nio.ByteBuffer;
-import java.util.jar.Attributes;
+
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -37,6 +30,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(new MyView(this));
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   // 屏幕常亮
         if (this.getResources().getConfiguration().orientation ==
                 Configuration.ORIENTATION_LANDSCAPE) {
             MyScreen.getInstance().setlandflag(true);
@@ -46,9 +40,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         Log.d("MainActivity", "OnCreate");
-        /*float xdpi = getResources().getDisplayMetrics().xdpi;
-        float ydpi = getResources().getDisplayMetrics().ydpi;
-        Log.d("MainActivity", "xdpi is " + xdpi + "; ydpi is " + ydpi);*/
+
         DisplayMetrics metric = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metric);
         int height = metric.heightPixels;

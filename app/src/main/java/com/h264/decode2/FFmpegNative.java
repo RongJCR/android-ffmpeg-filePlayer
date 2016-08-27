@@ -26,7 +26,6 @@ public class FFmpegNative {
         System.loadLibrary("avcodec-56");
         System.loadLibrary("avformat-56");
         System.loadLibrary("swscale-3");
-        //System.loadLibrary("SDL");
         System.loadLibrary("Myffmpeg_codec");
     }
     public native int Init(String videoPath,byte[] sdpBuf);
